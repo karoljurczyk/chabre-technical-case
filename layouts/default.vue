@@ -1,7 +1,9 @@
 <template>
   <div>
-    <!-- <AppHeader /> -->
-    <slot />
-    <!-- <AppFooter /> -->
+    <OrganismsHeader />
+    <UContainer class="py-8">
+      <slot />
+    </UContainer>
+    <OrganismsFooter />
   </div>
 </template>
