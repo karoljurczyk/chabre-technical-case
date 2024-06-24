@@ -3,14 +3,12 @@ import type Travel from "~/models/travel";
 
 const { id } = useRoute().params;
 
-const { data: travel, status } = await useFetch<Travel>(`/api/travel?id=${id}`, { lazy: true, server: false });
+const { data: travel } = await useFetch<Travel>(`/api/travel?id=${id}`);
 </script>
 
 <template>
-  <div v-if="status !== 'success'">
-    Loading ...
-  </div>
+  <div v-if="!travel">Loading ...</div>
   <div v-else>
-    <MoleculesFormTravel :travel="travel" />
+    <TravelForm :travel="travel" />
   </div>
 </template>

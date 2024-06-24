@@ -1,9 +1,9 @@
 <template>
   <div>
-    <OrganismsHeader />
+    <UiHeader />
     <UContainer class="py-8">
       <slot />
     </UContainer>
-    <OrganismsFooter />
+    <UiFooter />
   </div>
 </template>

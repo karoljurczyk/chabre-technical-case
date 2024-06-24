@@ -1,4 +1,4 @@
-import { date, number, object, string } from 'yup'
+import { date, number, object, string } from "yup";
 
 export const schema = object({
   name: string().required(),
@@ -8,7 +8,7 @@ export const schema = object({
   userRating: number().required().min(1).max(5),
   departureDate: date().required(),
   returnDate: date().required(),
-})
+});
 
 export default class Travel {
   id?: string;

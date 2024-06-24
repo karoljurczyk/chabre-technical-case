@@ -3,7 +3,10 @@ import type { PropType } from "vue";
 import Booking, { schema } from "~/models/booking";
 import type Travel from "~/models/travel";
 
-const { booking } = defineProps({ booking: { type: Object as PropType<Booking>, required: true } });
+const { booking } = defineProps({
+  booking: { type: Object as PropType<Booking>, required: true },
+  travels: { type: Array as PropType<Travel[]>, required: false, default: () => [] },
+});
 
 const userGenders = [
   { label: "Male", value: "male" },
@@ -30,8 +33,6 @@ const state = reactive({
 });
 
 const step = ref(0);
-
-const { data: travels } = await useFetch<Travel[]>("/api/travels", { lazy: true, server: false });
 
 async function onSubmit() {
   if (step.value < 2) {

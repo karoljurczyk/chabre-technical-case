@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { UiConfirm } from "#components";
 import type Travel from "~/models/travel";
 
 const columns = [
@@ -34,7 +35,9 @@ const columns = [
 
 const { data: travels, refresh, status } = await useFetch<Travel[]>("/api/travels", { lazy: true, server: false });
 
-const query = ref("");
+const query = ref<string>("");
+const priceMin = ref<Travel["price"]>();
+const priceMax = ref<Travel["price"]>();
 
 const rows = computed(() => {
   let _rows = travels.value ?? [];
@@ -43,28 +46,52 @@ const rows = computed(() => {
     _rows = _rows.filter((v) => v.name.toLowerCase().includes(query.value.toLowerCase()));
   }
 
+  if (priceMin.value) {
+    _rows = _rows.filter((v) => v.price! >= priceMin.value!);
+  }
+
+  if (priceMax.value) {
+    _rows = _rows.filter((v) => v.price! <= priceMax.value!);
+  }
+
   return _rows;
 });
 
-const onDelete = async (id: Travel["id"]) => {
-  try {
-    await $fetch("/api/travel", {
-      method: "delete",
-      body: { id },
-    });
+const modal = useModal();
 
-    refresh();
-  } catch (e) {
-    console.error(e);
-  }
+const onDelete = (id: Travel["id"]) => {
+  modal.open(UiConfirm, {
+    async onSuccess() {
+      modal.close();
+
+      try {
+        await $fetch("/api/travel", {
+          method: "delete",
+          body: { id },
+        });
+
+        refresh();
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    onError() {
+      modal.close();
+    },
+  });
 };
 </script>
 
 <template>
   <div class="border border-gray-200 rounded-md">
-    <div class="flex justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-      <UInput v-model="query" placeholder="Filter ..." />
-      <UButton color="green" to="/travel/add">Add</UButton>
+    <div class="flex gap-4 p-4 border-b border-gray-200 dark:border-gray-700">
+      <UFormGroup label="Search by name">
+        <UInput v-model="query" placeholder="query" />
+      </UFormGroup>
+      <UFormGroup class="" label="Filter by price" :ui="{ container: 'flex gap-2' }">
+        <UInput v-model="priceMin" type="number" placeholder="min" />
+        <UInput v-model="priceMax" type="number" placeholder="max" />
+      </UFormGroup>
     </div>
 
     <UTable
@@ -78,9 +105,7 @@ const onDelete = async (id: Travel["id"]) => {
       <template #picture-data="{ row }">
         <UAvatar :src="row.picture" size="2xs" />
       </template>
-      <template #price-data="{ row }">
-        ${{ row.price.toFixed(2) }}
-      </template>
+      <template #price-data="{ row }"> ${{ row.price.toFixed(2) }} </template>
       <template #rating-data="{ row }">
         {{ row.userRating.toFixed(1) }}
       </template>
@@ -97,5 +122,9 @@ const onDelete = async (id: Travel["id"]) => {
         </div>
       </template>
     </UTable>
+
+    <div class="flex justify-end p-4 border-t border-gray-200 dark:border-gray-700">
+      <UButton color="green" to="/travel/add">Add</UButton>
+    </div>
   </div>
 </template>

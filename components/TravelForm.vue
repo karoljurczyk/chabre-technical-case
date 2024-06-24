@@ -2,7 +2,9 @@
 import type { PropType } from "vue";
 import Travel, { schema } from "~/models/travel";
 
-const { travel } = defineProps({ travel: { type: Object as PropType<Travel>, required: true } });
+const { travel } = defineProps({
+  travel: { type: Object as PropType<Travel>, required: true },
+});
 
 const state = reactive({
   id: travel?.id,
