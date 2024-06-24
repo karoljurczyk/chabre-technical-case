@@ -11,6 +11,6 @@ const { data: travel, status } = await useFetch<Travel>(`/api/travel?id=${id}`, 
     Loading ...
   </div>
   <div v-else>
-    <MoleculesTravelForm :travel="travel" />
+    <MoleculesFormTravel :travel="travel" />
   </div>
 </template>

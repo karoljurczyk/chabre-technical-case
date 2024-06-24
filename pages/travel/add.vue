@@ -5,5 +5,5 @@ const travel = new Travel();
 </script>
 
 <template>
-  <MoleculesTravelForm :travel="travel" />
+  <MoleculesFormTravel :travel="travel" />
 </template>

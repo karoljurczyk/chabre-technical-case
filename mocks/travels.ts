@@ -2,7 +2,7 @@ import { faker } from "@faker-js/faker";
 
 import Travel from "~/models/travel";
 
-const travels =  Array.from(Array(10)).map(
+export const travels = Array.from(Array(10)).map(
   () =>
     new Travel({
       id: faker.string.uuid(),

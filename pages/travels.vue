@@ -76,7 +76,7 @@ const onDelete = async (id: Travel["id"]) => {
       :rows="rows"
     >
       <template #picture-data="{ row }">
-        <img alt="" class="block w-4 h-4 object-cover" :src="row.picture" loading="lazy" />
+        <UAvatar :src="row.picture" size="2xs" />
       </template>
       <template #price-data="{ row }">
         ${{ row.price.toFixed(2) }}
